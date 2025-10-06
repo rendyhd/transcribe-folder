@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from .db.database import engine
-from .models import transcription, folder, log
+from app.db.database import engine
+from app.models import transcription, folder, log
 
 # Create the database tables
 transcription.Base.metadata.create_all(bind=engine)
@@ -9,7 +9,7 @@ log.Base.metadata.create_all(bind=engine)
 
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from .api import folders, jobs, logs, settings
+from app.api import folders, jobs, logs, settings
 
 app = FastAPI(
     title="Automated Audio Transcription Monitor",
@@ -19,7 +19,7 @@ app = FastAPI(
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
-from .core.worker import start_worker
+from app.core.worker import start_worker
 
 app.include_router(folders.router, prefix="/api")
 app.include_router(jobs.router, prefix="/api")
