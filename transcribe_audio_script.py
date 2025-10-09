@@ -1,3 +1,14 @@
+"""Transcribes audio files in a specified folder using a local AI model.
+
+This script connects to a local OpenAI-compatible API to transcribe all
+supported audio files within a given directory. It iterates through the
+folder, identifies audio files by their extension, and sends them to a local
+transcription server.
+
+The resulting transcription is saved as a text file with the same name as the
+audio file, but with a `.txt` extension. The script is designed to be
+configured by changing the global constants at the top of the file.
+"""
 import os
 from openai import OpenAI
 
@@ -6,7 +17,7 @@ from openai import OpenAI
 #    This is the address where your local model (e.g., Whisper) is being served.
 #    - For LM Studio: "http://localhost:1234/v1"
 #    - For many others: "http://localhost:8080/v1"
-API_BASE_URL = "http://localhost:8002/v1" 
+API_BASE_URL = "http://localhost:8002/v1"
 
 # 2. Set an API key. For most local servers, this can be any string.
 API_KEY = "not-needed"
@@ -17,7 +28,7 @@ MODEL_NAME = "Systran/faster-distil-whisper-large-v3" # Common default, but chec
 
 # 4. Set the path to the folder containing your audio files.
 #    Use "." for the current directory or provide an absolute/relative path.
-AUDIO_FOLDER = "./to_transcribe" 
+AUDIO_FOLDER = "./to_transcribe"
 
 # 5. Define which audio file extensions the script should look for.
 SUPPORTED_EXTENSIONS = ('.mp3', '.wav', '.m4a', '.flac', '.ogg', '.mp4', '.webm')
@@ -25,9 +36,25 @@ SUPPORTED_EXTENSIONS = ('.mp3', '.wav', '.m4a', '.flac', '.ogg', '.mp4', '.webm'
 # --- Main Script Logic ---
 
 def transcribe_audio_in_folder(folder_path: str):
-    """
-    Loops through a folder, transcribes supported audio files using a local
-    server, and saves the transcription as a .txt file next to the original.
+    """Transcribes all supported audio files in a given folder.
+
+    This function scans the specified directory for audio files with extensions
+    listed in `SUPPORTED_EXTENSIONS`. For each audio file found, it sends a
+    request to a local OpenAI-compatible server to perform transcription.
+
+    If a transcription for a file already exists (i.e., a corresponding .txt
+    file is present), the file is skipped. Otherwise, the transcribed text is
+    saved to a new .txt file with the same base name as the audio file.
+
+    Args:
+        folder_path (str): The absolute or relative path to the folder
+            containing the audio files to be transcribed.
+
+    Side Effects:
+        - Prints status messages, warnings, and errors to the console.
+        - Creates a .txt file for each successfully transcribed audio file in
+          the `folder_path` directory. The new file contains the full
+          transcribed text.
     """
     print(f"Attempting to connect to local server at: {API_BASE_URL}")
     try:

@@ -1,17 +1,40 @@
+"""Converts a collection of text files into a single chapterized PDF.
+
+This script scans a specified directory for `.txt` files, sorts them
+alphabetically, and then compiles them into a single PDF document. Each text
+file is treated as a separate chapter, with its filename (cleaned up) used as
+the chapter title.
+
+The script requires the `fpdf2` library and includes fallback for Unicode fonts.
+For best results, DejaVu fonts should be placed in the same directory as the
+script to ensure proper rendering of special characters.
+"""
 import os
 from pathlib import Path
 from fpdf import FPDF
 
 # --- Configuration ---
 # Specify the folder containing your .txt files
-INPUT_FOLDER = "./to_transcribe" 
+INPUT_FOLDER = "./to_transcribe"
 # Specify the name of the output PDF file
 OUTPUT_PDF = "output.pdf"
 
-def create_chapterized_pdf(input_dir, output_file):
-    """
-    Finds all .txt files in a directory, sorts them, and combines them
-    into a single chapterized PDF file.
+def create_chapterized_pdf(input_dir: str, output_file: str):
+    """Combines all .txt files in a directory into a single chapterized PDF.
+
+    This function searches the `input_dir` for all files ending with the .txt
+    extension, sorts them alphabetically, and generates a PDF. Each file's
+    content becomes a new chapter, with the filename serving as the chapter
+    title.
+
+    Args:
+        input_dir (str): The path to the directory containing the .txt files.
+        output_file (str): The filename for the generated PDF.
+
+    Side Effects:
+        - Creates a new PDF file at the `output_file` path.
+        - Prints progress, warnings, and errors to the console.
+        - If the `input_dir` does not exist, it is created.
     """
     folder_path = Path(input_dir)
     if not folder_path.is_dir():

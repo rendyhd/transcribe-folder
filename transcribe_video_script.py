@@ -1,3 +1,13 @@
+"""Transcribes audio and video files in a folder using a local AI model.
+
+This script connects to a local OpenAI-compatible API to transcribe all
+supported media files (both audio and video) within a specified directory.
+The server is expected to handle audio extraction from video formats.
+
+The resulting transcription is saved as a text file with the same name as the
+media file, but with a `.txt` extension. Configuration, such as the API
+endpoint and target folder, is managed via global constants.
+"""
 import os
 from openai import OpenAI
 
@@ -6,7 +16,7 @@ from openai import OpenAI
 #    This is the address where your local model (e.g., Whisper) is being served.
 #    - For LM Studio: "http://localhost:1234/v1"
 #    - For many others: "http://localhost:8080/v1"
-API_BASE_URL = "http://localhost:8002/v1" 
+API_BASE_URL = "http://localhost:8002/v1"
 
 # 2. Set an API key. For most local servers, this can be any string.
 API_KEY = "not-needed"
@@ -17,7 +27,7 @@ MODEL_NAME = "Systran/faster-distil-whisper-large-v3" # Common default, but chec
 
 # 4. Set the path to the folder containing your media files.
 #    Use "." for the current directory or provide an absolute/relative path.
-MEDIA_FOLDER = "./to_transcribe" 
+MEDIA_FOLDER = "./to_transcribe"
 
 # 5. Define which audio and video file extensions the script should look for.
 SUPPORTED_EXTENSIONS = (
@@ -30,9 +40,22 @@ SUPPORTED_EXTENSIONS = (
 # --- Main Script Logic ---
 
 def transcribe_media_in_folder(folder_path: str):
-    """
-    Loops through a folder, transcribes supported audio and video files using a
-    local server, and saves the transcription as a .txt file next to the original.
+    """Transcribes all supported media files in a given folder.
+
+    Scans the specified directory for files with extensions listed in
+    `SUPPORTED_EXTENSIONS`. For each file, it sends a request to a local
+    OpenAI-compatible server for transcription. The server handles audio
+    extraction from video files automatically.
+
+    If a transcription file (.txt) already exists for a media file, that file
+    is skipped. Otherwise, the transcribed text is saved to a new .txt file.
+
+    Args:
+        folder_path (str): The path to the folder containing media files.
+
+    Side Effects:
+        - Prints progress and errors to the console.
+        - Creates a .txt file in `folder_path` for each new transcription.
     """
     print(f"Attempting to connect to local server at: {API_BASE_URL}")
     try:
