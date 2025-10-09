@@ -1,8 +1,2 @@
-fastapi
-uvicorn[standard]
-sqlalchemy
-pydantic
-pydantic-settings
-python-dotenv
-requests
-ffmpeg-python
+fpdf2
+openai
