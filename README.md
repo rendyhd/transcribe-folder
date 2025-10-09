@@ -19,7 +19,7 @@ This approach is ideal for users who want to transcribe sensitive media or avoid
     - `openai`
     - `fpdf2`
 3.  **A Local AI Server**: You must have a local application running that serves a transcription model (like Whisper) through an OpenAI-compatible API endpoint.
-    - **Examples**: [LM Studio](https://lmstudio.ai/), [oobabooga/text-generation-webui](https://github.com/oobabooga/text-generation-webui), or any other server that provides a `v1/audio/transcriptions` endpoint.
+    - **Examples**: [Speaches]([url](https://speaches.ai/))
 4.  **(Optional) DejaVu Fonts**: For the best PDF output with full character support, download the [DejaVu fonts](https://dejavu-fonts.github.io/) and place `DejaVuSans.ttf` and `DejaVuSans-Bold.ttf` in the root directory of this project.
 
 ## Setup
